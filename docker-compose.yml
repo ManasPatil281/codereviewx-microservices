@@ -1,0 +1,53 @@
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api-gateway:
+    build: ./services/api-gateway
+    env_file: .env
+    environment:
+      API_GATEWAY_PORT: 8080
+      GITHUB_SERVICE_URL: http://github-service:8081
+      REDIS_URL: redis://redis:6379
+    ports: ["8080:8080"]
+    restart: unless-stopped
+
+  github-service:
+    build: ./services/github-service
+    env_file: .env
+    environment:
+      GITHUB_SERVICE_PORT: 8081
+      REDIS_URL: redis://redis:6379
+    ports: ["8081:8081"]
+    restart: unless-stopped
+
+  webhook-service:
+    build: ./services/webhook-service
+    env_file: .env
+    environment:
+      WEBHOOK_SERVICE_PORT: 8082
+      REDIS_URL: redis://redis:6379
+    ports: ["8082:8082"]
+    depends_on:
+      redis: { condition: service_healthy }
+    restart: unless-stopped
+
+  review-worker:
+    build: ./services/review-worker
+    env_file: .env
+    depends_on:
+      redis: { condition: service_healthy }
+    environment:
+      REDIS_URL: redis://redis:6379
+    restart: unless-stopped
+
+volumes:
+  redisdata:

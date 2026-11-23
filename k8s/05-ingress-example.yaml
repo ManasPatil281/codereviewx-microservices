@@ -1,0 +1,16 @@
+# Replace host and configure an ingress controller + TLS before using this.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: codereviewx
+spec:
+  rules:
+    - host: codereviewx.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api-gateway
+                port: { number: 8080 }

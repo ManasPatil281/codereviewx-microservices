@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: webhook-service }
+  template:
+    metadata:
+      labels: { app: webhook-service }
+    spec:
+      containers:
+        - name: webhook-service
+          image: YOUR_REGISTRY/codereviewx-webhook-service:latest
+          ports: [{ containerPort: 8082 }]
+          envFrom:
+            - configMapRef: { name: codereviewx-config }
+            - secretRef: { name: codereviewx-secrets }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-service
+spec:
+  selector: { app: webhook-service }
+  ports: [{ port: 8082, targetPort: 8082 }]
+  type: ClusterIP

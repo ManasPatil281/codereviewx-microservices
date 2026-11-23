@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0d1117">
+  <meta name="description" content="CodeReviewX — a command center for thoughtful, AI-assisted pull request reviews.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <title>CodeReviewX · Pull request intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="CodeReviewX home">
+        <span class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 8.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm9 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM7.5 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm1.5-4.5v-2a3 3 0 0 1 3-3h1a3 3 0 0 0 3-3V8"/><path d="M7.5 8.5v5"/></svg></span>
+        <span class="brand-name">code<span>review</span>x</span>
+        <span class="brand-version">MVP</span>
+      </a>
+
+      <div class="workspace-switcher">
+        <div class="workspace-avatar">CX</div>
+        <div class="workspace-copy"><span class="eyebrow">WORKSPACE</span><strong>CodeReviewX</strong></div>
+        <svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+      </div>
+
+      <div class="nav-label">WORKSPACE</div>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <a href="#overview" class="nav-item active" data-view="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg><span>Overview</span><kbd>⌘ 1</kbd></a>
+        <a href="#reviews" class="nav-item" data-view="reviews"><svg viewBox="0 0 24 24"><path d="M8 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5M8 3h8v4H8z"/><path d="m9 14 2 2 7-7"/></svg><span>Review runs</span><span class="nav-count" id="nav-review-count">0</span></a>
+        <a href="#repositories" class="nav-item" data-view="repositories"><svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 4.5v17M8 6h8M8 10h7"/></svg><span>Repositories</span><span class="nav-count" id="nav-repo-count">0</span></a>
+      </nav>
+
+      <div class="sidebar-divider"></div>
+      <div class="nav-label nav-label-row"><span>YOUR REPOSITORIES</span><button class="icon-button small" id="sidebar-add" title="Add repository" aria-label="Add repository">+</button></div>
+      <div id="sidebar-repos" class="repo-nav-list"></div>
+
+      <div class="sidebar-spacer"></div>
+      <div class="system-card">
+        <div class="system-head"><span class="pulse-dot"></span><span>All systems operational</span><button class="icon-button small" id="refresh-button" title="Refresh data" aria-label="Refresh data"><svg viewBox="0 0 20 20"><path d="M16 8a6.2 6.2 0 0 0-10.8-2L3 8"/><path d="M3 4v4h4M4 12a6.2 6.2 0 0 0 10.8 2L17 12"/><path d="M17 16v-4h-4"/></svg></button></div>
+        <p>API gateway <span id="health-status" class="health-text">checking…</span></p>
+        <div class="system-meter"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="profile-row"><div class="profile-avatar">D</div><div class="profile-copy"><strong>Developer</strong><span>Personal workspace</span></div><button class="icon-button" aria-label="Account menu">···</button></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumbs"><span class="crumb-root">CodeReviewX</span><span class="crumb-slash">/</span><strong id="current-section">Overview</strong></div>
+        <div class="topbar-actions"><div class="live-indicator"><span></span>LIVE</div><button class="top-icon" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">⌘</button><button class="help-button" id="help-button">? <span>Help</span></button></div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="welcome-row">
+          <div><div class="date-line"><span class="date-mark"></span><span id="today-label">YOUR CODE, REVIEWED</span></div><h1>Good code deserves<br><em>great reviewers.</em></h1><p class="welcome-subtitle">Your pull request command center. Spot the signal, ship with confidence.</p></div>
+          <div class="welcome-actions"><button class="button button-secondary" id="add-repo-top"><svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12"/></svg> Add repository</button><button class="button button-primary" id="run-review-top"><svg viewBox="0 0 20 20"><path d="M11.5 2 4 11h5l-.5 7L16 9h-5z"/></svg> Run a review <kbd>R</kbd></button></div>
+        </section>
+
+        <section class="stat-grid" aria-label="Workspace summary">
+          <article class="stat-card stat-card-runs"><div class="stat-top"><span class="stat-label">TOTAL REVIEWS</span><span class="stat-icon violet"><svg viewBox="0 0 24 24"><path d="M8 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5M8 3h8v4H8z"/><path d="m9 14 2 2 7-7"/></svg></span></div><div class="stat-number" id="stat-total">—</div><div class="stat-foot"><span class="stat-dot violet-bg"></span> Across all repositories</div><div class="stat-spark spark-violet"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">ISSUES FLAGGED</span><span class="stat-icon orange"><svg viewBox="0 0 24 24"><path d="M12 3 2.8 19a1.4 1.4 0 0 0 1.2 2h16a1.4 1.4 0 0 0 1.2-2L12 3Z"/><path d="M12 9v4m0 3h.01"/></svg></span></div><div class="stat-number" id="stat-findings">—</div><div class="stat-foot"><span class="stat-dot orange-bg"></span> Actionable findings</div><div class="stat-spark spark-orange"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">REPOSITORIES</span><span class="stat-icon green"><svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 4.5v17M8 6h8"/></svg></span></div><div class="stat-number" id="stat-repos">—</div><div class="stat-foot"><span class="stat-dot green-bg"></span> Connected &amp; monitored</div><div class="stat-spark spark-green"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+          <article class="stat-card"><div class="stat-top"><span class="stat-label">IN THE QUEUE</span><span class="stat-icon blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span></div><div class="stat-number" id="stat-queued">—</div><div class="stat-foot"><span class="stat-dot blue-bg"></span> Queued or reviewing</div><div class="stat-spark spark-blue"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+        </section>
+
+        <section class="panel scaling-panel" id="scaling-panel" aria-label="Kubernetes scaling">
+          <div class="panel-heading scaling-heading"><div><div class="panel-title-row"><h2>Cluster scaling</h2><span class="cluster-chip"><i></i> LIVE</span></div><p id="cluster-caption">Deployment replicas and HPA status from Kubernetes.</p></div><button class="select-button" id="refresh-cluster">Refresh cluster</button></div>
+          <div class="scaling-content" id="scaling-content"><div class="scaling-loading"><span class="pulse-dot"></span> Checking Kubernetes access…</div></div>
+        </section>
+
+        <section class="content-grid">
+          <div class="panel activity-panel" id="reviews-panel">
+            <div class="panel-heading"><div><div class="panel-title-row"><h2>Recent reviews</h2><span id="review-total-chip" class="soft-chip">0</span></div><p>Every change, one thoughtful review at a time.</p></div><div class="panel-tools"><label class="search-box"><svg viewBox="0 0 20 20"><circle cx="8.8" cy="8.8" r="5.8"/><path d="m13 13 4 4"/></svg><input id="review-search" type="search" placeholder="Filter reviews…" aria-label="Filter reviews"></label><button class="select-button" id="status-filter">All statuses <span>⌄</span></button></div></div>
+            <div class="review-table-wrap"><table class="review-table"><thead><tr><th>REVIEW</th><th>STATUS</th><th>FINDINGS</th><th>WHEN</th><th></th></tr></thead><tbody id="review-list"></tbody></table><div class="empty-state hidden" id="reviews-empty"><div class="empty-illustration"><span class="empty-orbit orbit-one"></span><span class="empty-orbit orbit-two"></span><span class="empty-core"><svg viewBox="0 0 24 24"><path d="M8 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5M8 3h8v4H8z"/><path d="m9 14 2 2 7-7"/></svg></span></div><h3>Nothing under the microscope. Yet.</h3><p>Kick off your first review and let the code speak for itself.</p><button class="button button-primary" id="empty-run-review"><svg viewBox="0 0 20 20"><path d="M11.5 2 4 11h5l-.5 7L16 9h-5z"/></svg> Start your first review</button></div></div>
+            <div class="table-footer"><span id="review-footer-text">Showing recent activity</span><button class="text-button" id="view-all-reviews">View all reviews <span>→</span></button></div>
+          </div>
+
+          <aside class="right-rail">
+            <div class="panel repositories-panel" id="repos-panel"><div class="panel-heading compact-heading"><div><div class="panel-title-row"><h2>Repositories</h2><span id="repo-total-chip" class="soft-chip">0</span></div><p>Ready when your PR is.</p></div><button class="icon-button" id="add-repo-icon" aria-label="Add repository" title="Add repository"><svg viewBox="0 0 20 20"><path d="M10 4v12M4 10h12"/></svg></button></div><div class="repository-list" id="repository-list"></div><div class="repo-empty hidden" id="repos-empty"><div class="mini-empty-mark"><svg viewBox="0 0 24 24"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 4.5v17"/></svg></div><strong>Start with a repository</strong><span>Connect a GitHub repo to begin reviewing.</span><button class="text-button" id="empty-add-repo">+ Add your first repo</button></div><button class="repo-add-link" id="add-repo-link"><span>+</span> Add repository</button></div>
+            <div class="insight-card"><div class="insight-orb orb-a"></div><div class="insight-orb orb-b"></div><div class="insight-label"><span class="insight-spark">✳</span> THE REVIEW LOOP</div><h3>Better code,<br>minus the guesswork.</h3><p>Connect your GitHub repo, run a review on any open pull request, and let the findings surface the details worth a second look.</p><div class="insight-flow"><span>DIFF</span><i>····</i><span class="flow-core">✳</span><i>····</i><span>SIGNAL</span></div><div class="insight-foot"><span>AI assisted</span><span class="insight-live"><i></i> Built for the flow</span></div></div>
+          </aside>
+        </section>
+        <footer class="page-footer"><span>Made for the details that matter <span class="footer-star">✳</span></span><span>CodeReviewX <span class="footer-sep">·</span> Your code stays yours.</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modal-backdrop" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button class="modal-close icon-button" id="modal-close" aria-label="Close dialog">×</button><div class="modal-kicker" id="modal-kicker">LET'S GET CONNECTED</div><h2 id="modal-title">Add a repository</h2><p class="modal-description" id="modal-description">Link a GitHub repository to bring its pull requests into your review flow.</p><form id="repo-form" class="modal-form"><label>Repository owner<div class="input-wrap"><span>@</span><input id="repo-owner" name="owner" autocomplete="off" placeholder="octocat" pattern="[A-Za-z0-9_.\-]+" required></div></label><label>Repository name<div class="input-wrap"><svg viewBox="0 0 20 20"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H17v15H6.5A2.5 2.5 0 0 0 4 19.5zM4 4.5v15"/></svg><input id="repo-name" name="name" autocomplete="off" placeholder="my-awesome-project" pattern="[A-Za-z0-9_.\-]+" required></div></label><div class="form-hint"><span>↗</span> Use the owner and name from your GitHub repository URL.</div><div class="form-error hidden" id="repo-error"></div><div class="modal-actions"><button type="button" class="button button-secondary" data-dismiss>Cancel</button><button class="button button-primary" type="submit" id="repo-submit">Connect repository <span>→</span></button></div></form>
+      <form id="review-form" class="modal-form hidden"><label>Repository<select id="review-repo" required><option value="">Choose a connected repository</option></select></label><label>Pull request number<div class="input-wrap"><span class="hash-mark">#</span><input id="pull-number" name="pull_number" type="number" min="1" step="1" placeholder="42" required></div></label><div class="form-hint"><span>✳</span> We’ll fetch the latest diff and queue a fresh review.</div><div class="form-error hidden" id="review-error"></div><div class="modal-actions"><button type="button" class="button button-secondary" data-dismiss>Cancel</button><button class="button button-primary" type="submit" id="review-submit"><svg viewBox="0 0 20 20"><path d="M11.5 2 4 11h5l-.5 7L16 9h-5z"/></svg> Queue review</button></div></form></section>
+  </div>
+
+  <div class="toast-region" id="toast-region" aria-live="polite"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
